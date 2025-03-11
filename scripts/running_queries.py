@@ -9,7 +9,8 @@ from sqlalchemy import create_engine
 # 1) Database Connection String
 #    Adjust to your local or Supabase credentials.
 # -------------------------------------------------
-conn_str = "postgresql://postgres.ofzmjajybuxefodhbuvq:Nb2pndua123@aws-0-us-east-1.pooler.supabase.com:6543/postgres"
+CONNECTION_STRING = os.getenv("CONNECTION_STRING")
+conn_str = CONNECTION_STRING
 engine = create_engine(conn_str)
 
 
