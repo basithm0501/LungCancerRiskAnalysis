@@ -169,3 +169,5 @@ model_performance <- data.frame(
 )
 print("Model Performance Summary:")
 print(model_performance)
+
+saveRDS(model_rf_tuned, file = "rf_model.rds")

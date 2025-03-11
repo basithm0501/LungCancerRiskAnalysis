@@ -11,3 +11,5 @@ ggplot
 python-dotenv
 reportlab
 psycopg2
+grid
+pdftools
