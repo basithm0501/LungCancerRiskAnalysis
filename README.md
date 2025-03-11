@@ -6,7 +6,6 @@ The **Lung Cancer Risk Analysis** project is a **data-driven approach** to predi
 - **Automated PDF reports for users**
 - **Statistical data analysis and visualization**
 - **A structured database for queries**
-- **A REST API to serve predictions**
 
 This project **empowers healthcare professionals** and individuals to make informed decisions about lung cancer risk based on **predictive analytics**.
 
