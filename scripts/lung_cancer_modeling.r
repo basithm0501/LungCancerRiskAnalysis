@@ -7,7 +7,6 @@ library(tidyverse)      # Data manipulation and visualization
 library(caret)          # Modeling and cross-validation
 library(randomForest)   # Random Forest implementation
 library(e1071)          # For SVM model (requires kernlab too)
-library(nnet)           # For Neural Network model
 library(pROC)           # ROC and AUC calculations
 library(FSelector)      # For mutual information based feature selection
 library(kernlab)
@@ -119,5 +118,54 @@ model_rf <- train(PULMONARY_DISEASE ~ ., data = trainData,
                   method = "rf", trControl = train_control, metric = "ROC")
 print("Random Forest Model:")
 print(model_rf)
-pred_rf <- predict(model_rf, new
-                   
+pred_rf <- predict(model_rf, newdata = testData)
+conf_rf <- confusionMatrix(pred_rf, testData$PULMONARY_DISEASE, positive = "Yes")
+print("Random Forest Confusion Matrix:")
+print(conf_rf)
+roc_rf <- roc(testData$PULMONARY_DISEASE, predict(model_rf, newdata = testData, type = "prob")[, "Yes"])
+print(paste("Random Forest AUC:", auc(roc_rf)))
+
+# 5.4 Support Vector Machine (SVM)
+set.seed(123)
+model_svm <- train(PULMONARY_DISEASE ~ ., data = trainData, 
+                   method = "svmRadial", trControl = train_control, metric = "ROC")
+print("SVM Model:")
+print(model_svm)
+pred_svm <- predict(model_svm, newdata = testData)
+conf_svm <- confusionMatrix(pred_svm, testData$PULMONARY_DISEASE, positive = "Yes")
+print("SVM Confusion Matrix:")
+print(conf_svm)
+roc_svm <- roc(testData$PULMONARY_DISEASE, predict(model_svm, newdata = testData, type = "prob")[, "Yes"])
+print(paste("SVM AUC:", auc(roc_svm)))
+
+# ---------------------------
+# 6. Model Optimization (Hyperparameter Tuning for Random Forest)
+# ---------------------------
+set.seed(123)
+tune_grid <- expand.grid(mtry = c(2, 4, 6, 8))
+model_rf_tuned <- train(PULMONARY_DISEASE ~ ., data = trainData, 
+                        method = "rf", trControl = train_control, metric = "ROC",
+                        tuneGrid = tune_grid)
+print("Tuned Random Forest Model:")
+print(model_rf_tuned)
+pred_rf_tuned <- predict(model_rf_tuned, newdata = testData)
+conf_rf_tuned <- confusionMatrix(pred_rf_tuned, testData$PULMONARY_DISEASE, positive = "Yes")
+print("Tuned Random Forest Confusion Matrix:")
+print(conf_rf_tuned)
+roc_rf_tuned <- roc(testData$PULMONARY_DISEASE, predict(model_rf_tuned, newdata = testData, type = "prob")[, "Yes"])
+print(paste("Tuned Random Forest AUC:", auc(roc_rf_tuned)))
+
+# ---------------------------
+# 7. Summarize Model Performance
+# ---------------------------
+model_performance <- data.frame(
+  Model = c("Logistic Regression", "Decision Tree", "Random Forest", "SVM", "Tuned RF"),
+  Accuracy = c(conf_lr$overall['Accuracy'],
+               conf_dt$overall['Accuracy'],
+               conf_rf$overall['Accuracy'],
+               conf_svm$overall['Accuracy'],
+               conf_rf_tuned$overall['Accuracy']),
+  ROC_AUC = c(auc(roc_lr), auc(roc_dt), auc(roc_rf), auc(roc_svm), auc(roc_rf_tuned))
+)
+print("Model Performance Summary:")
+print(model_performance)
