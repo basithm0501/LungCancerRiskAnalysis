@@ -1,3 +1,8 @@
+-- init_db.sql
+
+-- Drop existing table(s) to start fresh (optional).
+DROP TABLE IF EXISTS lung_cancer_data;
+
 CREATE TABLE lung_cancer_data (
     id SERIAL PRIMARY KEY,
     age INT NOT NULL,

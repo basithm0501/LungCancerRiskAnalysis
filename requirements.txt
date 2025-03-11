@@ -9,3 +9,5 @@ tidyverse
 caret
 ggplot
 python-dotenv
+reportlab
+psycopg2

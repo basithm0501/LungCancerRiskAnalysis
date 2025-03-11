@@ -14,7 +14,7 @@ SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # 4) Load your CSV data
-df = pd.read_csv("LungCancerDataset.csv")
+df = pd.read_csv("data/LungCancerDataset.csv")
 
 # 5) Rename CSV columns to match the SQL table definitions
 df = df.rename(columns={
